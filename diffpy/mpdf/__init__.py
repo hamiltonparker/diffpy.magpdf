@@ -23,5 +23,6 @@ from diffpy.mpdf.version import __version__
 # convenience imports
 from diffpy.mpdf.magstructure import *
 from diffpy.mpdf.mpdfcalculator import *
+from diffpy.mpdf.mpdf3dCalculator import *
 
 # End of file
