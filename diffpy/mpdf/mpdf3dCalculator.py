@@ -47,7 +47,6 @@ class MPDF3Dcalculator:
 
         self.gaussPeakWidht = gaussPeakWidth
         self.label = label
-        self.rgrid = None
         self.Nx = None
         self.Ny = None
         self.Nz = None
@@ -157,10 +156,10 @@ class MPDF3Dcalculator:
         Returns the real space grid points being used
         '''
         if self.dr is None:
-            self.make_rgrid()
-        X = np.np.arange(self.rmin[0],stop = self.rmax[0]+self.dr,step = self.dr)
-        Y = np.np.arange(self.rmin[1],stop = self.rmax[1]+self.dr,step = self.dr)
-        Z = np.np.arange(self.rmin[2],stop = self.rmax[2]+self.dr,step = self.dr)
+            self._make_rgrid()
+        X = np.arange(self.rmin[0],stop = self.rmax[0]+self.dr,step = self.dr)
+        Y = np.arange(self.rmin[1],stop = self.rmax[1]+self.dr,step = self.dr)
+        Z = np.arange(self.rmin[2],stop = self.rmax[2]+self.dr,step = self.dr)
 
         return X,Y,Z
 
