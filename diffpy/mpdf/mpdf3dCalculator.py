@@ -14,8 +14,11 @@ def vec_ac(a1,a2,delta):
     A function to implement the autocorrelation for two vector fields
     '''
     ac = sig.correlate(a1[:,:,:,0],a2[:,:,:,0],mode="same")*delta**3
+    print("**1**")
     ac += sig.correlate(a1[:,:,:,1],a2[:,:,:,1],mode="same")*delta**3
+    print("**2**")
     ac += sig.correlate(a1[:,:,:,2],a2[:,:,:,2],mode="same")*delta**3
+    print("**3**")
     return ac
 
 def vec_con(a1,a2,delta):
@@ -62,7 +65,7 @@ class MPDF3Dcalculator:
         '''
         Calculate and store the 3DMPDF 
         '''
-        print("Running calc")
+
         self._make_rgrid()
 
         s_arr = np.zeros((self.Nx,self.Ny,self.Nz,3))
@@ -78,7 +81,6 @@ class MPDF3Dcalculator:
 
             s_arr[idx[0],idx[1],idx[2]] = self.magstruc.spins[i]
 
-        s_3 = np.copy(s_arr)
         if verbose:
             print("Setting up filter grid")
 
@@ -103,35 +105,37 @@ class MPDF3Dcalculator:
             print("Computing mpdf")
 
         mag_ups = vec_con(s_arr,upsilon,self.dr)
-        self.mpdf = vec_ac(s_arr,s_arr,self.dr) - 1/(np.pi**4)*sig.correlate(mag_ups,mag_ups,mode='same')*self.dr**3
-        return s_arr,s_3
+        if verbose:
+            print("comp1")
+        comp1 = vec_ac(s_arr,s_arr,self.dr)
+        if verbose:
+            print("comp2")
+        comp2 = sig.correlate(mag_ups,mag_ups,mode='same')*self.dr**3
+        if verbose:
+            print("mpdf")
+        self.mpdf = comp1 - 1/(np.pi**4)*comp2
+        return s_arr,comp1,comp2,mag_ups,upsilon
 
-    def _make_rgrid(self, dr = 0.1):
+    def _make_rgrid(self, dr = 0.2,buf=2):
         self.dr = dr
         pos = np.array([a for a in self.magstruc.atoms])
-        print(type(pos))
-        x_min = np.min(pos[:,0])
-        x_max = np.max(pos[:,0])
-        y_min = np.min(pos[:,1])
-        y_max = np.max(pos[:,1])
-        z_min = np.min(pos[:,2])
-        z_max = np.max(pos[:,2])
+        x_min = np.min(pos[:,0]) - buf
+        x_max = np.max(pos[:,0]) + buf
+        y_min = np.min(pos[:,1]) - buf
+        y_max = np.max(pos[:,1]) + buf
+        z_min = np.min(pos[:,2]) - buf
+        z_max = np.max(pos[:,2]) + buf
 
-        print("Min/Max defined")
         x = np.arange(x_min,x_max + dr, dr)
         y = np.arange(y_min,y_max + dr, dr)
         z = np.arange(z_min,z_max + dr, dr)
         N_x = len(x)
         N_y = len(y)
         N_z = len(z)
-        print(N_x)
-        print(N_y)
-        print(N_z)
-        print("Making meshgrid")
         X,Y,Z = np.meshgrid(x,y,z,indexing='ij')
-        print("Making rgrid")
+        
         rgrid = np.moveaxis([X,Y,Z],0,-1)
-        print("Saving sizes")
+        
         self.Nx = N_x
         self.Ny = N_y
         self.Nz = N_z
