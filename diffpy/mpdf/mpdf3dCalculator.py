@@ -34,7 +34,7 @@ def ups(grid):
     '''
     A function to generat the Upsilon filter from Roth et.al.
     '''
-    g = lambda point: 0 if np.linalg.norm(point) == 0 else  point/np.linalg.norm(point)**4
+    g = lambda point: [0,0,0] if np.abs(np.linalg.norm(point)) <1e-6 else  point/np.linalg.norm(point)**4
     return np.apply_along_axis(g,3,grid)
 
 class MPDF3Dcalculator:
@@ -114,9 +114,9 @@ class MPDF3Dcalculator:
         if verbose:
             print("mpdf")
         self.mpdf = comp1 - 1/(np.pi**4)*comp2
-        return s_arr,comp1,comp2,mag_ups,upsilon
+        return 1
 
-    def _make_rgrid(self, dr = 0.2,buf=2):
+    def _make_rgrid(self, dr = 0.1,buf=2):
         self.dr = dr
         pos = np.array([a for a in self.magstruc.atoms])
         x_min = np.min(pos[:,0]) - buf
