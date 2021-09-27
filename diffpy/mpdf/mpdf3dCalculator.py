@@ -116,7 +116,7 @@ class MPDF3Dcalculator:
         self.mpdf = comp1 - 1/(np.pi**4)*comp2
         return s_arr,comp1,comp2,mag_ups,upsilon
 
-    def _make_rgrid(self, dr = 0.2,buf=2):
+    def _make_rgrid(self, dr = 0.1,buf=2):
         self.dr = dr
         pos = np.array([a for a in self.magstruc.atoms])
         x_min = np.min(pos[:,0]) - buf
