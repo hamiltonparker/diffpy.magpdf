@@ -65,7 +65,7 @@ def ups(grid):
     g = lambda point: [0,0,0] if np.abs(np.linalg.norm(point)) <1e-6 else  point/np.linalg.norm(point)**4
     return np.apply_along_axis(g,3,grid)
 
-class 3DMPDFcalculator:
+class MPDF3Dcalculator:
     """Create an MPDF3Dcalculator object to help calculate 3D-mPDF functions
 
     This class is loosely modelled after the PDFcalculator cless in diffpy.
@@ -99,13 +99,16 @@ class 3DMPDFcalculator:
         else:
             return self.label +  ": 3DMPDFcalculator() object"
 
-    def calc(self, verbose=False):
+    def calc(self, verbose=False, dr=None):
         """Calculate the 3D magnetic PDF
 
         Args:
             verbose (boolean): indicates whether to output progress 
+            dr (float): the grid spacing to use
         """
 
+        if dr is not None:
+            self.dr = dr
         self._makeRgrid()
 
         s_arr = np.zeros((self.Nx,self.Ny,self.Nz,3))
@@ -153,15 +156,18 @@ class 3DMPDFcalculator:
         #self.mpdf = comp1 - 1/(np.pi**4)*comp2
         return 
 
-    def _makeRgrid(self, dr = 0.2,buf=0):
+    def _makeRgrid(self,dr = None,buf=0):
         """Set up bounds and intervals of the spatial grid to use
 
         Args:
-            dr (float): the grid spacing
+            dr (float): the grid spacing to use
             buf (float): the space to include on either side of the 
                 spin distribution
         """
-        self.dr = dr
+        if dr is not None:
+            self.dr = dr
+        if self.dr is None:
+            self.dr = 0.2
         pos = np.array([a for a in self.magstruc.atoms])
         x_min = np.min(pos[:,0]) - buf
         x_max = np.max(pos[:,0]) + buf
