@@ -176,9 +176,9 @@ class MPDF3Dcalculator:
         z_min = np.min(pos[:,2]) - buf
         z_max = np.max(pos[:,2]) + buf
 
-        x = np.arange(x_min,x_max + dr, dr)
-        y = np.arange(y_min,y_max + dr, dr)
-        z = np.arange(z_min,z_max + dr, dr)
+        x = np.arange(x_min,x_max + self.dr, self.dr)
+        y = np.arange(y_min,y_max + self.dr, self.dr)
+        z = np.arange(z_min,z_max + self.dr, self.dr)
         N_x = len(x)
         N_y = len(y)
         N_z = len(z)
