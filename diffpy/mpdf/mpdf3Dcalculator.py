@@ -146,14 +146,14 @@ class MPDF3Dcalculator:
         if verbose:
             print("comp1")
         self.mpdf = vec_ac(s_arr,s_arr,self.dr,"full")
-        #comp1 = vec_ac(s_arr,s_arr,self.dr,"full")
+   
         if verbose:
             print("comp2")
         self.mpdf += -1/(np.pi**4)*sig.correlate(mag_ups,mag_ups,mode="full")*self.dr**3
-        #comp2 = sig.correlate(mag_ups,mag_ups,mode="full")*self.dr**3
+        
         if verbose:
             print("mpdf")
-        #self.mpdf = comp1 - 1/(np.pi**4)*comp2
+        
         return 
 
     def _makeRgrid(self,dr = None,buf=0):
