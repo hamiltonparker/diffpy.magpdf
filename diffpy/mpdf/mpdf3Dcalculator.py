@@ -143,16 +143,8 @@ class MPDF3Dcalculator:
             print("Computing mpdf")
 
         mag_ups = vec_con(s_arr,upsilon,self.dr)
-        if verbose:
-            print("comp1")
         self.mpdf = vec_ac(s_arr,s_arr,self.dr,"full")
-   
-        if verbose:
-            print("comp2")
         self.mpdf += -1/(np.pi**4)*sig.correlate(mag_ups,mag_ups,mode="full")*self.dr**3
-        
-        if verbose:
-            print("mpdf")
         
         return 
 
